@@ -260,4 +260,32 @@ class Magestore_Webpos_Adminhtml_PosuserController extends Mage_Adminhtml_Contro
         return Mage::getSingleton('admin/session')->isAllowed('sales/webpos/manage_webpos_permission/manage_webpos_user');
     }
 
+    /**
+     *
+     */
+    public function chooserMainCategoriesAction() {
+        $request = $this->getRequest();
+        $ids = $request->getParam('selected', array());
+
+        if (is_array($ids)) {
+            foreach ($ids as $key => &$id) {
+                $id = (int)$id;
+                if ($id <= 0) {
+                    unset($ids[$key]);
+                }
+            }
+
+            $ids = array_unique($ids);
+        } else {
+            $ids = array();
+        }
+
+        $block = $this->getLayout()->createBlock('webpos/adminhtml_user_edit_tab_content_customfieldset_categories', 'customfieldset_category', array('js_form_object' => $request->getParam('form')))
+            ->setCategoryIds($ids);
+
+        if ($block) {
+            $this->getResponse()->setBody($block->toHtml());
+        }
+    }
+
 }

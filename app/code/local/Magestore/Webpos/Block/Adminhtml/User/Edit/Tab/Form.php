@@ -132,8 +132,59 @@ class Magestore_Webpos_Block_Adminhtml_User_Edit_Tab_Form extends Mage_Adminhtml
             'class' => 'required-entry',
             'required' => true,
             'name' => 'status',
-            'values' => Mage::getSingleton('webpos/status')->getOptionArray()
+            'values' => Mage::getSingleton('webpos/status')->getOptionArray(),
         ));
+
+        $categoryIds = implode(", ", Mage::getResourceModel('catalog/category_collection')->addFieldToFilter('level', array('gt' => 0))->getAllIds());
+        if(!isset($data['categories'])){
+            $data['categories'] = $categoryIds;
+        }
+        $fieldset->addField('categories', 'text', array(
+            'label' => Mage::helper('webpos')->__('Categories'),
+            'name' => 'categories',
+            'required' => true,
+            'after_element_html' => '<a id="category_link" href="javascript:void(0)" onclick="toggleMainCategories()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Categories"></a>
+                <div  id="categories_check" style="display:none">
+                    <a href="javascript:toggleMainCategories(1)">Check All</a> / <a href="javascript:toggleMainCategories(2)">Uncheck All</a>
+                </div>
+                <input type="hidden" value="' . $categoryIds . '" id="category_all_ids" />
+                <div id="main_categories_select" style="display:none"></div>
+                    <script type="text/javascript">
+                    function toggleMainCategories(check){
+                        var cate = $("main_categories_select");
+                        if($("main_categories_select").style.display == "none" || (check ==1) || (check == 2)){
+                            $("categories_check").style.display ="";
+                            var url = "' . $this->getUrl('adminhtml/posuser/chooserMainCategories') . '";
+                            if(check == 1){
+                                $("categories").value = $("category_all_ids").value;
+                            }else if(check == 2){
+                                $("categories").value = "";
+                            }
+                            var params = $("categories").value.split(", ");
+                            var parameters = {"form_key": FORM_KEY,"selected[]":params };
+                            var request = new Ajax.Request(url,
+                                {
+                                    evalScripts: true,
+                                    parameters: parameters,
+                                    onComplete:function(transport){
+                                        $("main_categories_select").update(transport.responseText);
+                                        $("main_categories_select").style.display = "block"; 
+                                    }
+                                });
+                        if(cate.style.display == "none"){
+                            cate.style.display = "";
+                        }else{
+                            cate.style.display = "none";
+                        } 
+                    }else{
+                        cate.style.display = "none";
+                        $("categories_check").style.display ="none";
+                    }
+                };
+		</script>
+            '
+        ));
+
         unset($data['password']);
         unset($data['password_confirmation']);
         $form->setValues($data);
