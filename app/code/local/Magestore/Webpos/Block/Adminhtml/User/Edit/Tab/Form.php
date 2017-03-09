@@ -136,12 +136,12 @@ class Magestore_Webpos_Block_Adminhtml_User_Edit_Tab_Form extends Mage_Adminhtml
         ));
 
         $categoryIds = implode(", ", Mage::getResourceModel('catalog/category_collection')->addFieldToFilter('level', array('gt' => 0))->getAllIds());
-        if(!isset($data['categories'])){
-            $data['categories'] = $categoryIds;
+        if(!isset($data['category_ids'])){
+            $data['category_ids'] = $categoryIds;
         }
-        $fieldset->addField('categories', 'text', array(
+        $fieldset->addField('category_ids', 'text', array(
             'label' => Mage::helper('webpos')->__('Categories'),
-            'name' => 'categories',
+            'name' => 'category_ids',
             'required' => true,
             'after_element_html' => '<a id="category_link" href="javascript:void(0)" onclick="toggleMainCategories()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Categories"></a>
                 <div  id="categories_check" style="display:none">
@@ -156,11 +156,11 @@ class Magestore_Webpos_Block_Adminhtml_User_Edit_Tab_Form extends Mage_Adminhtml
                             $("categories_check").style.display ="";
                             var url = "' . $this->getUrl('adminhtml/posuser/chooserMainCategories') . '";
                             if(check == 1){
-                                $("categories").value = $("category_all_ids").value;
+                                $("category_ids").value = $("category_all_ids").value;
                             }else if(check == 2){
-                                $("categories").value = "";
+                                $("category_ids").value = "";
                             }
-                            var params = $("categories").value.split(", ");
+                            var params = $("category_ids").value.split(", ");
                             var parameters = {"form_key": FORM_KEY,"selected[]":params };
                             var request = new Ajax.Request(url,
                                 {

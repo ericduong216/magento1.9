@@ -170,7 +170,7 @@ Ext.onReady(function()
     });
 
     tree.on('check', function(node, checked) {
-        $('categories').value = this.getChecked().join(', ');
+        $('category_ids').value = this.getChecked().join(', ');
         varienElementMethods.setHasChanges(node.getUI().checkbox);
     }, tree);
 
