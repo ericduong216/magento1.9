@@ -142,7 +142,7 @@ class Magestore_Webpos_Block_Adminhtml_User_Edit_Tab_Form extends Mage_Adminhtml
         $fieldset->addField('category_ids', 'text', array(
             'label' => Mage::helper('webpos')->__('Categories'),
             'name' => 'category_ids',
-            'required' => true,
+            'required' => false,
             'after_element_html' => '<a id="category_link" href="javascript:void(0)" onclick="toggleMainCategories()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Categories"></a>
                 <div  id="categories_check" style="display:none">
                     <a href="javascript:toggleMainCategories(1)">Check All</a> / <a href="javascript:toggleMainCategories(2)">Uncheck All</a>

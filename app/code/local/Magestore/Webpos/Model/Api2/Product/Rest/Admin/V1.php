@@ -201,6 +201,24 @@ class Magestore_Webpos_Model_Api2_Product_Rest_Admin_V1 extends Magestore_Webpos
             Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($collection);
         }
 
+        $user_sesstion = Mage::getModel('webpos/user_webpossession')->loadBySession($session);
+        $user_category_ids = trim($user_sesstion->getStaff()->getData('category_ids'));
+        if ($user_category_ids != ""){
+            $restrict_category_ids = explode(',',$user_category_ids);
+
+            $collection->joinField(
+                'category_id', 'catalog/category_product', 'category_id',
+                'product_id = entity_id', null, 'left'
+            )
+                ->addAttributeToFilter('category_id', array(
+                    array('in' => $restrict_category_ids),
+                ));
+        }else {
+            $result['total_count'] = 0;
+            $result['items'] = array();
+            return $result;
+        }
+
         /* @var Varien_Data_Collection_Db $customerCollection */
         $this->_applyFilter($collection);
         $this->_applyFilterOr($collection);

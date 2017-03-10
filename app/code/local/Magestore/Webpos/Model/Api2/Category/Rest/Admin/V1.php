@@ -91,6 +91,22 @@ class Magestore_Webpos_Model_Api2_Category_Rest_Admin_V1 extends Magestore_Webpo
         $collection->setCurPage($pageNumber)->setPageSize($pageSize);
 
 
+        $session = $this->getRequest()->getParam('session');
+        $user_sesstion = Mage::getModel('webpos/user_webpossession')->loadBySession($session);
+        $user_category_ids = trim($user_sesstion->getStaff()->getData('category_ids'));
+        if ($user_category_ids != ""){
+            $restrict_category_ids = explode(', ',$user_category_ids);
+
+            $collection->addFieldToFilter('entity_id', array(
+                array('in' => $restrict_category_ids),
+            ));
+
+        }else {
+            $result['items'] = array();
+            $result['total_count'] = 0;
+            return $result;
+        }
+
         /* @var Varien_Data_Collection_Db $customerCollection */
         $this->_applyFilter($collection);
         $this->_applyFilterOr($collection);
