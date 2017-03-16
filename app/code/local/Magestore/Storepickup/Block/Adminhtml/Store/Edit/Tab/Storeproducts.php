@@ -41,13 +41,24 @@ class Magestore_Storepickup_Block_Adminhtml_Store_Edit_Tab_Storeproducts extends
         $this->setSaveParametersInSession(true);
     }
 
+    protected function _getStore()
+    {
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        return Mage::app()->getStore($storeId);
+    }
+
     /**
      * @return mixed
      */
     protected function _prepareCollection()
     {
-        $collection = Mage::getModel('catalog/product')->getCollection();
-		
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        $collection = Mage::getModel('catalog/product')->getCollection()
+            ->setStoreId($storeId)
+            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('visibility')
+            ->addAttributeToSelect('status');
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -90,19 +101,6 @@ class Magestore_Storepickup_Block_Adminhtml_Store_Edit_Tab_Storeproducts extends
             'options'   => Mage::getSingleton('catalog/product_type')->getOptionArray(),
         ));
 
-        $sets = Mage::getResourceModel('eav/entity_attribute_set_collection')
-            ->setEntityTypeFilter(Mage::getModel('catalog/product')->getResource()->getTypeId())
-            ->load()
-            ->toOptionHash();
-
-        $this->addColumn('set_name', array(
-            'header'    => Mage::helper('catalog')->__('Attrib. Set Name'),
-            'width'     => 130,
-            'index'     => 'attribute_set_id',
-            'type'      => 'options',
-            'options'   => $sets,
-        ));
-
         $this->addColumn('status', array(
             'header'    => Mage::helper('catalog')->__('Status'),
             'width'     => 90,
@@ -121,28 +119,9 @@ class Magestore_Storepickup_Block_Adminhtml_Store_Edit_Tab_Storeproducts extends
 
         $this->addColumn('sku', array(
             'header'    => Mage::helper('catalog')->__('SKU'),
-            'width'     => 80,
+            'width'     => 200,
             'index'     => 'sku'
         ));
-
-        $this->addColumn('price', array(
-            'header'        => Mage::helper('catalog')->__('Price'),
-            'type'          => 'currency',
-            'currency_code' => (string) Mage::getStoreConfig(Mage_Directory_Model_Currency::XML_PATH_CURRENCY_BASE),
-            'index'         => 'price'
-        ));
-
-//        $this->addColumn('position', array(
-//            'header'                    => Mage::helper('catalog')->__('Position'),
-//            'name'                      => 'position',
-//            'type'                      => 'number',
-//            'validate_class'            => 'validate-number',
-//            'index'                     => 'position',
-//            'width'                     => 60,
-//            'editable'                  => !$this->_getProduct()->getRelatedReadonly(),
-//            'edit_only'                 => !$this->_getProduct()->getId(),
-//            'filter_condition_callback' => array($this, '_addLinkModelFilterCallback')
-//        ));
 
         return parent::_prepareColumns();
     }
@@ -154,7 +133,7 @@ class Magestore_Storepickup_Block_Adminhtml_Store_Edit_Tab_Storeproducts extends
     {
         return $this->getData('grid_url')
             ? $this->getData('grid_url')
-            : $this->getUrl('*/*/StoreproductsGrid', array('_current'=>true,'id'=>$this->getRequest()->getParam('id')));
+            : $this->getUrl('*/*/storeproductsGrid', array('_current'=>true,'id'=>$this->getRequest()->getParam('id')));
     }
 
     /**
