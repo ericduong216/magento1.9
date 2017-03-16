@@ -83,6 +83,23 @@
             </block>
         </block>	
     </adminhtml_storepickup_store_relatedorders>
+
+    <adminhtml_storepickup_store_storeproducts>
+        <block type="core/text_list" name="root">
+            <block type="storepickup/adminhtml_store_edit_tab_storeproducts" name="storepickup.edit.tab.storeproducts"/>
+            <block type="adminhtml/widget_grid_serializer" name="related_grid_serializer">
+                <action method="initSerializerBlock">
+                    <grid_block_name>storepickup.edit.tab.storeproducts</grid_block_name>
+                    <data_callback>getStoreProducts</data_callback>
+                    <hidden_input_name>storepickup_storeproducts</hidden_input_name><!-- -->
+                    <reload_param_name>storeproducts</reload_param_name><!-- reload goi productGrid-->
+                </action>
+                <action method="addColumnInputName">
+                    <input_name>position</input_name>
+                </action>
+            </block>
+        </block>
+    </adminhtml_storepickup_store_storeproducts>
 	
     <adminhtml_storepickup_store_relatedordersgrid>
         <block type="core/text_list" name="root">

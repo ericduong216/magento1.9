@@ -26,7 +26,7 @@
 <config>
     <modules>
         <Magestore_Storepickup>
-            <version>0.4.3</version>
+            <version>0.4.4</version>
         </Magestore_Storepickup>
     </modules>
     <frontend>

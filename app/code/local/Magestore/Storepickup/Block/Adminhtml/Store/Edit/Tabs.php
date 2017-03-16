@@ -72,6 +72,13 @@ class Magestore_Storepickup_Block_Adminhtml_Store_Edit_Tabs extends Mage_Adminht
                 'class' => 'ajax',
             ));
         }
+        if ($this->getRequest()->getParam('id')) {
+            $this->addTab('storeproducts_section', array(
+                'label' => Mage::helper('storepickup')->__('Store Products'),
+                'url' => $this->getUrl('*/*/storeproducts', array('_current' => true, 'id' => $this->getRequest()->getParam('id'))),
+                'class' => 'ajax',
+            ));
+        }
         return parent::_beforeToHtml();
     }
 
