@@ -258,6 +258,9 @@
                     <specialday>
                         <table>storepickup_specialday</table>
                     </specialday>
+                    <storeproducts>
+                        <table>storepickup_product</table>
+                    </storeproducts>
                 </entities>
             </storepickup_mysql4>
             <sales>

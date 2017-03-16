@@ -64,6 +64,17 @@ class Magestore_Storepickup_Adminhtml_Storepickup_StoreController extends Mage_A
         $this->renderLayout();
     }
 
+    /**
+     * Get related products grid and serializer block
+     */
+    public function storeproductsAction()
+    {
+        $this->loadLayout();
+        $this->getLayout()->getBlock('storepickup.edit.tab.storeproducts');
+            //->setStoreProducts($this->getRequest()->getPost('products_related', null));
+        $this->renderLayout();
+    }
+
     public function messageAction()
     {
         $this->loadLayout();
